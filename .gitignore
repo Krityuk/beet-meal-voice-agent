@@ -1,0 +1,19 @@
+node_modules/
+dist/
+coverage/
+.qodo/
+.vscode/
+
+# Environment files
+.env
+.env.local
+
+agent/.env
+agent/.env.local
+
+backend/.env
+
+frontend/.env
+
+# Notes
+ZZZ_Notes

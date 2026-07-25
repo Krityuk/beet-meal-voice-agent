@@ -1,0 +1,584 @@
+{
+  "version": "1.0",
+  "description": "Source of truth for meal logging. Users may only log dishes listed here, using the allowed units for each dish. Nutrition values are approximate per single unit.",
+  "foods": [
+    {
+      "id": "roti",
+      "name": "Roti",
+      "aliases": [
+        "roti",
+        "chapati",
+        "phulka",
+        "fulka"
+      ],
+      "category": "bread",
+      "unit": "piece",
+      "label": "piece",
+      "nutrition": {
+        "calories": 71,
+        "protein": 2.7,
+        "carbs": 15.4,
+        "fat": 0.4,
+        "fiber": 2.1
+      }
+    },
+    {
+      "id": "paratha",
+      "name": "Paratha",
+      "aliases": [
+        "paratha",
+        "parantha",
+        "aloo paratha"
+      ],
+      "category": "bread",
+      "unit": "piece",
+      "label": "piece",
+      "nutrition": {
+        "calories": 180,
+        "protein": 4.5,
+        "carbs": 24.0,
+        "fat": 7.5,
+        "fiber": 2.8
+      }
+    },
+    {
+      "id": "dal",
+      "name": "Dal",
+      "aliases": [
+        "dal",
+        "daal",
+        "lentil curry",
+        "yellow dal",
+        "toor dal"
+      ],
+      "category": "curry",
+      "unit": "katori",
+      "label": "katori",
+      "nutrition": {
+        "calories": 104,
+        "protein": 7.0,
+        "carbs": 16.0,
+        "fat": 2.0,
+        "fiber": 4.5
+      }
+    },
+    {
+      "id": "rajma",
+      "name": "Rajma",
+      "aliases": [
+        "rajma",
+        "kidney bean curry",
+        "rajma masala"
+      ],
+      "category": "curry",
+      "unit": "katori",
+      "label": "katori",
+      "nutrition": {
+        "calories": 120,
+        "protein": 7.5,
+        "carbs": 18.0,
+        "fat": 2.5,
+        "fiber": 5.0
+      }
+    },
+    {
+      "id": "chole",
+      "name": "Chole",
+      "aliases": [
+        "chole",
+        "chana masala",
+        "chickpea curry"
+      ],
+      "category": "curry",
+      "unit": "katori",
+      "label": "katori",
+      "nutrition": {
+        "calories": 130,
+        "protein": 6.5,
+        "carbs": 20.0,
+        "fat": 3.0,
+        "fiber": 5.5
+      }
+    },
+    {
+      "id": "paneer-butter-masala",
+      "name": "Paneer Butter Masala",
+      "aliases": [
+        "paneer butter masala",
+        "paneer makhani",
+        "paneer curry"
+      ],
+      "category": "curry",
+      "unit": "katori",
+      "label": "katori",
+      "nutrition": {
+        "calories": 180,
+        "protein": 8.0,
+        "carbs": 10.0,
+        "fat": 13.0,
+        "fiber": 1.5
+      }
+    },
+    {
+      "id": "palak-paneer",
+      "name": "Palak Paneer",
+      "aliases": [
+        "palak paneer",
+        "spinach paneer",
+        "saag paneer"
+      ],
+      "category": "curry",
+      "unit": "katori",
+      "label": "katori",
+      "nutrition": {
+        "calories": 150,
+        "protein": 9.0,
+        "carbs": 8.0,
+        "fat": 10.0,
+        "fiber": 2.5
+      }
+    },
+    {
+      "id": "chicken-curry",
+      "name": "Chicken Curry",
+      "aliases": [
+        "chicken curry",
+        "murgh curry",
+        "chicken masala"
+      ],
+      "category": "curry",
+      "unit": "katori",
+      "label": "katori",
+      "nutrition": {
+        "calories": 170,
+        "protein": 18.0,
+        "carbs": 6.0,
+        "fat": 9.0,
+        "fiber": 1.0
+      }
+    },
+    {
+      "id": "fish-curry",
+      "name": "Fish Curry",
+      "aliases": [
+        "fish curry",
+        "machli curry",
+        "fish masala"
+      ],
+      "category": "curry",
+      "unit": "katori",
+      "label": "katori",
+      "nutrition": {
+        "calories": 160,
+        "protein": 17.0,
+        "carbs": 5.0,
+        "fat": 8.5,
+        "fiber": 0.8
+      }
+    },
+    {
+      "id": "mutton-curry",
+      "name": "Mutton Curry",
+      "aliases": [
+        "mutton curry",
+        "gosht curry",
+        "lamb curry"
+      ],
+      "category": "curry",
+      "unit": "katori",
+      "label": "katori",
+      "nutrition": {
+        "calories": 220,
+        "protein": 20.0,
+        "carbs": 5.0,
+        "fat": 14.0,
+        "fiber": 0.5
+      }
+    },
+    {
+      "id": "sambar",
+      "name": "Sambar",
+      "aliases": [
+        "sambar",
+        "sambhar"
+      ],
+      "category": "curry",
+      "unit": "katori",
+      "label": "katori",
+      "nutrition": {
+        "calories": 90,
+        "protein": 4.0,
+        "carbs": 14.0,
+        "fat": 2.0,
+        "fiber": 3.5
+      }
+    },
+    {
+      "id": "steamed-rice",
+      "name": "Steamed Rice",
+      "aliases": [
+        "rice",
+        "steamed rice",
+        "chawal",
+        "plain rice"
+      ],
+      "category": "grain",
+      "unit": "katori",
+      "label": "katori",
+      "nutrition": {
+        "calories": 117,
+        "protein": 2.6,
+        "carbs": 26.0,
+        "fat": 0.3,
+        "fiber": 0.4
+      }
+    },
+    {
+      "id": "biryani",
+      "name": "Biryani",
+      "aliases": [
+        "biryani",
+        "chicken biryani",
+        "veg biryani",
+        "mutton biryani"
+      ],
+      "category": "grain",
+      "unit": "plate",
+      "label": "plate",
+      "nutrition": {
+        "calories": 450,
+        "protein": 18.0,
+        "carbs": 55.0,
+        "fat": 16.0,
+        "fiber": 3.0
+      }
+    },
+    {
+      "id": "khichdi",
+      "name": "Khichdi",
+      "aliases": [
+        "khichdi",
+        "khichri",
+        "dal khichdi"
+      ],
+      "category": "grain",
+      "unit": "bowl",
+      "label": "bowl",
+      "nutrition": {
+        "calories": 220,
+        "protein": 8.0,
+        "carbs": 38.0,
+        "fat": 4.0,
+        "fiber": 4.0
+      }
+    },
+    {
+      "id": "idli",
+      "name": "Idli",
+      "aliases": [
+        "idli",
+        "idly"
+      ],
+      "category": "breakfast",
+      "unit": "piece",
+      "label": "piece",
+      "nutrition": {
+        "calories": 39,
+        "protein": 2.0,
+        "carbs": 7.8,
+        "fat": 0.2,
+        "fiber": 0.5
+      }
+    },
+    {
+      "id": "dosa",
+      "name": "Dosa",
+      "aliases": [
+        "dosa",
+        "masala dosa",
+        "plain dosa"
+      ],
+      "category": "breakfast",
+      "unit": "piece",
+      "label": "piece",
+      "nutrition": {
+        "calories": 133,
+        "protein": 3.5,
+        "carbs": 22.0,
+        "fat": 3.5,
+        "fiber": 1.2
+      }
+    },
+    {
+      "id": "poha",
+      "name": "Poha",
+      "aliases": [
+        "poha",
+        "pohe",
+        "flattened rice"
+      ],
+      "category": "breakfast",
+      "unit": "bowl",
+      "label": "bowl",
+      "nutrition": {
+        "calories": 180,
+        "protein": 4.0,
+        "carbs": 32.0,
+        "fat": 4.5,
+        "fiber": 2.0
+      }
+    },
+    {
+      "id": "upma",
+      "name": "Upma",
+      "aliases": [
+        "upma",
+        "uppuma",
+        "rava upma"
+      ],
+      "category": "breakfast",
+      "unit": "bowl",
+      "label": "bowl",
+      "nutrition": {
+        "calories": 190,
+        "protein": 5.0,
+        "carbs": 28.0,
+        "fat": 6.0,
+        "fiber": 2.5
+      }
+    },
+    {
+      "id": "vada",
+      "name": "Vada",
+      "aliases": [
+        "vada",
+        "medu vada",
+        "urad vada"
+      ],
+      "category": "snack",
+      "unit": "piece",
+      "label": "piece",
+      "nutrition": {
+        "calories": 97,
+        "protein": 3.5,
+        "carbs": 10.0,
+        "fat": 5.0,
+        "fiber": 1.2
+      }
+    },
+    {
+      "id": "samosa",
+      "name": "Samosa",
+      "aliases": [
+        "samosa",
+        "singara"
+      ],
+      "category": "snack",
+      "unit": "piece",
+      "label": "piece",
+      "nutrition": {
+        "calories": 262,
+        "protein": 5.0,
+        "carbs": 28.0,
+        "fat": 14.0,
+        "fiber": 2.5
+      }
+    },
+    {
+      "id": "pakora",
+      "name": "Pakora",
+      "aliases": [
+        "pakora",
+        "pakoda",
+        "bhajiya",
+        "onion pakora"
+      ],
+      "category": "snack",
+      "unit": "piece",
+      "label": "piece",
+      "nutrition": {
+        "calories": 75,
+        "protein": 2.0,
+        "carbs": 8.0,
+        "fat": 4.0,
+        "fiber": 1.0
+      }
+    },
+    {
+      "id": "chai",
+      "name": "Chai",
+      "aliases": [
+        "chai",
+        "tea",
+        "masala chai",
+        "ginger tea"
+      ],
+      "category": "beverage",
+      "unit": "cup",
+      "label": "cup",
+      "nutrition": {
+        "calories": 90,
+        "protein": 2.0,
+        "carbs": 12.0,
+        "fat": 3.5,
+        "fiber": 0.0
+      }
+    },
+    {
+      "id": "milk",
+      "name": "Milk",
+      "aliases": [
+        "milk",
+        "doodh",
+        "full fat milk"
+      ],
+      "category": "beverage",
+      "unit": "glass",
+      "label": "glass",
+      "nutrition": {
+        "calories": 150,
+        "protein": 8.0,
+        "carbs": 12.0,
+        "fat": 8.0,
+        "fiber": 0.0
+      }
+    },
+    {
+      "id": "lassi",
+      "name": "Lassi",
+      "aliases": [
+        "lassi",
+        "sweet lassi",
+        "mango lassi",
+        "salted lassi"
+      ],
+      "category": "beverage",
+      "unit": "glass",
+      "label": "glass",
+      "nutrition": {
+        "calories": 180,
+        "protein": 6.0,
+        "carbs": 28.0,
+        "fat": 5.0,
+        "fiber": 0.0
+      }
+    },
+    {
+      "id": "curd",
+      "name": "Curd",
+      "aliases": [
+        "curd",
+        "dahi",
+        "yogurt",
+        "plain curd"
+      ],
+      "category": "dairy",
+      "unit": "katori",
+      "label": "katori",
+      "nutrition": {
+        "calories": 60,
+        "protein": 4.0,
+        "carbs": 5.0,
+        "fat": 3.0,
+        "fiber": 0.0
+      }
+    },
+    {
+      "id": "boiled-egg",
+      "name": "Boiled Egg",
+      "aliases": [
+        "boiled egg",
+        "egg",
+        "anda",
+        "hard boiled egg"
+      ],
+      "category": "protein",
+      "unit": "piece",
+      "label": "piece",
+      "nutrition": {
+        "calories": 78,
+        "protein": 6.3,
+        "carbs": 0.6,
+        "fat": 5.3,
+        "fiber": 0.0
+      }
+    },
+    {
+      "id": "omelette",
+      "name": "Omelette",
+      "aliases": [
+        "omelette",
+        "omelet",
+        "egg omelette",
+        "masala omelette"
+      ],
+      "category": "protein",
+      "unit": "piece",
+      "label": "piece",
+      "nutrition": {
+        "calories": 154,
+        "protein": 10.0,
+        "carbs": 2.0,
+        "fat": 12.0,
+        "fiber": 0.0
+      }
+    },
+    {
+      "id": "banana",
+      "name": "Banana",
+      "aliases": [
+        "banana",
+        "kela",
+        "ripe banana"
+      ],
+      "category": "fruit",
+      "unit": "piece",
+      "label": "piece",
+      "nutrition": {
+        "calories": 105,
+        "protein": 1.3,
+        "carbs": 27.0,
+        "fat": 0.4,
+        "fiber": 3.1
+      }
+    },
+    {
+      "id": "apple",
+      "name": "Apple",
+      "aliases": [
+        "apple",
+        "seb"
+      ],
+      "category": "fruit",
+      "unit": "piece",
+      "label": "piece",
+      "nutrition": {
+        "calories": 95,
+        "protein": 0.5,
+        "carbs": 25.0,
+        "fat": 0.3,
+        "fiber": 4.4
+      }
+    },
+    {
+      "id": "salad",
+      "name": "Salad",
+      "aliases": [
+        "salad",
+        "green salad",
+        "mixed salad",
+        "kachumber"
+      ],
+      "category": "side",
+      "unit": "bowl",
+      "label": "bowl",
+      "nutrition": {
+        "calories": 45,
+        "protein": 2.0,
+        "carbs": 8.0,
+        "fat": 0.5,
+        "fiber": 3.0
+      }
+    }
+  ]
+}
