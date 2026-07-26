@@ -44,8 +44,16 @@ Resolve natural language dates like "today", "yesterday",
 
     execute: async ({ food, startDate, endDate }) => {
         try {
-            const dateRange =
-                startDate && endDate ? { startDate, endDate, } : undefined;
+            let dateRange;
+
+            if (startDate && endDate) {
+                dateRange = { startDate, endDate };
+            } else if (startDate) {
+                dateRange = {
+                    startDate,
+                    endDate: startDate,
+                };
+            }
 
             const matches = await findMatchingMeals(food, dateRange);
 
@@ -61,11 +69,15 @@ Resolve natural language dates like "today", "yesterday",
 
             const result = await deleteMeal(meal._id);
 
-            return result.message;
+            return result;
         } catch (error) {
-            return error instanceof Error
-                ? error.message
-                : "Unable to delete the meal.";
+            return {
+                success: false,
+                message:
+                    error instanceof Error
+                        ? error.message
+                        : "Unable to delete meal.",
+            };
         }
     },
 });

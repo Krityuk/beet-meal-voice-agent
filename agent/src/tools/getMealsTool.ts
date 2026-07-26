@@ -60,9 +60,13 @@ const getMealsTool = llm.tool({
 
             return result;
         } catch (error) {
-            return error instanceof Error
-                ? error.message
-                : "Unable to retrieve meals.";
+            return {
+                success: false,
+                message:
+                    error instanceof Error
+                        ? error.message
+                        : "Unable to retrieve meals.",
+            };
         }
     },
 });

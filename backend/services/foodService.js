@@ -58,7 +58,7 @@ function calculateNutrition(food, quantity) {
     };
 }
 
-function getFoodDetails(query, quantity, mealType = null) {
+function getFoodDetails(query, quantity, mealType = null, consumedDate) {
     const food = searchFood(query);
 
     if (!food) {
@@ -77,6 +77,7 @@ function getFoodDetails(query, quantity, mealType = null) {
         unit : food.unit, // came using foods.json
         mealType,
         nutrition,
+        consumedDate : consumedDate
     };
 }
 

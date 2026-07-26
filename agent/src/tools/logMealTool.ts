@@ -4,39 +4,65 @@ import { createMeal } from "../mealTools.ts";
 
 const logMealTool = llm.tool({
     description:
-        "Log a meal eaten by the user. Extract the food name, quantity, and meal type from the conversation.",
+        `Log a new meal for the user.
+
+Use this tool whenever the user says they ate or drank something.
+
+Examples:
+- I ate 2 bananas.
+- I had rice for lunch.
+- I drank 1 coffee yesterday breakfast.
+- I ate an apple.
+- I had 3 rotis for dinner.
+
+Do NOT use this tool if the user is asking to:
+- update an existing meal
+- delete a meal
+- retrieve meals
+
+Extract the food name, quantity, and meal type and date from the conversation.
+        `
+    ,
     parameters: z.object({
         food: z.string().describe("Name of the food eaten"),
-        quantity: z.number().positive(),
+        quantity: z.number().positive().describe("Quantity of the food."),
         mealType: z
             .enum(["breakfast", "lunch", "dinner", "snack"])
             .optional(),
+        consumedDate: z
+            .string()
+            .default("Today")
+            .describe("Date in YYYY-MM-DD format. Resolve natural language dates like today or yesterday before calling."),
     }),
-    execute: async ({ food, quantity, mealType }) => {
+    execute: async ({ food, quantity, mealType, consumedDate }) => {
         console.log("========== logMealTool CALLED ==========");
-        console.log({ food, quantity, mealType });
+        console.log({ food, quantity, mealType, consumedDate, });
         try {
             console.log(" Initializing data 🫠🫠🫠🫠")
-            const data: { food: string; quantity: number; mealType?: string; } 
-            = { food, quantity, };
+            const data: { food: string; quantity?: number; mealType?: string; consumedDate?: string }
+                = { food };
 
-            console.log(" Adding mealType if exist 🫠🫠🫠🫠")
+            if (quantity)
+                data.quantity = quantity;
 
             if (mealType) {
                 data.mealType = mealType;
             }
-            console.log(" Going to call createMeal Function 🫠🫠🫠🫠")
-
-            console.log("🫠🫠🫠🫠 typeof createMeal =", typeof createMeal);
-            console.log("🫠🫠🫠🫠 createMeal =", createMeal);
+            if (consumedDate) {
+                data.consumedDate = consumedDate;
+            }
 
             const result = await createMeal(data);
 
-            return result.message;
+            return result;
         } catch (error) {
-            return error instanceof Error
-                ? error.message
-                : "Unable to log meal.";
+            return {
+                success: false,
+                message:
+                    error instanceof Error
+                        ? error.message
+                        : "Unable to log meal.",
+            };
         }
     }
 });

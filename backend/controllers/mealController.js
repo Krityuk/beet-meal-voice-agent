@@ -2,6 +2,7 @@ import { logMeal, getMeals, updateMeal, deleteMeal, } from "../services/mealServ
 
 async function logMealController(req, res) {
     console.log("Inside logMealController 🫠🫠🫠🫠");
+    console.log(req.body, "is req.body 🫠🫠🫠🫠");
     try {
         const meal = await logMeal(req.body);
 
@@ -21,9 +22,11 @@ async function logMealController(req, res) {
 async function getMealsController(req, res) {
     console.log("Inside getMealsController 🫠🫠🫠🫠");
     try {
-        const { startDate, endDate } = req.query;
+        const { food, startDate, endDate } = req.query;
+        console.log(food, startDate, endDate, "is dateRange in getMealsController 🫠🫠🫠🫠");
 
         const meals = await getMeals({
+            food,
             startDate,
             endDate,
         });
@@ -68,6 +71,13 @@ async function deleteMealController(req, res) {
         const { mealId } = req.params;
 
         const deletedMeal = await deleteMeal(mealId);
+
+        if (!deletedMeal) {
+            return {
+                success: false,
+                message: "No such meal found for this timeline."
+            };
+        }
 
         res.status(200).json({
             success: true,

@@ -1,7 +1,8 @@
 const BASE_URL = "http://localhost:5000/api/meals";
 
-async function createMeal(data: { food: string; quantity: number; mealType?: string; }) {
+async function createMeal(data: { food: string; quantity?: number; mealType?: string; consumedDate?: string, }) {
     console.log("============ I am inside createMeal func at mealTools.ts 🫠🫠🫠🫠====================")
+    console.log(data, "is data inside createMeal");
     const response = await fetch(BASE_URL, {
         method: "POST",
         headers: {
@@ -49,13 +50,7 @@ async function getMeals(params?: { food?: string; startDate?: string; endDate?: 
     return response.json();
 }
 
-async function updateMeal(
-    mealId: string,
-    data: {
-        food?: string;
-        quantity?: number;
-    }
-) {
+async function updateMeal(mealId: string, data: { food?: string; quantity?: number; }) {
     const response = await fetch(`${BASE_URL}/${mealId}`, {
         method: "PUT",
         headers: {

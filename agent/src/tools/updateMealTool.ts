@@ -48,14 +48,24 @@ Resolve natural language dates such as "today", "yesterday",
             .string()
             .optional()
             .describe(
-                "End date in YYYY-MM-DD format if the user specifies a time period."
+                "End date in YYYY-MM-DD format if the user specifies a time period. Assume start date if not given"
             ),
     }),
 
     execute: async ({ oldFood, newFood, quantity, startDate, endDate, }) => {
+        console.log(startDate, endDate, "These are dates generated in updateMealTool 💵💵💵💵")
         try {
-            const dateRange =
-                startDate && endDate ? { startDate, endDate, } : undefined;
+            let dateRange;
+
+            if (startDate && endDate) {
+                dateRange = { startDate, endDate };
+            } else if (startDate) {
+                dateRange = {
+                    startDate,
+                    endDate: startDate,
+                };
+            }
+            console.log(dateRange, "These are dates generated in updateMealTool 💵💵💵💵")
 
             const matches = await findMatchingMeals(oldFood, dateRange);
 
@@ -81,11 +91,15 @@ Resolve natural language dates such as "today", "yesterday",
 
             const result = await updateMeal(meal._id, data);
 
-            return result.message;
+            return result;
         } catch (error) {
-            return error instanceof Error
-                ? error.message
-                : "Unable to update the meal.";
+            return {
+                success: false,
+                message:
+                    error instanceof Error
+                        ? error.message
+                        : "Unable to update meal.",
+            };
         }
     },
 });

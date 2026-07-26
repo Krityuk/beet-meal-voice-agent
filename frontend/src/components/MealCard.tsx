@@ -5,13 +5,6 @@ interface Props {
 }
 
 export default function MealCard({ meal }: Props) {
-    const loggedTime = new Date(meal.loggedAt).toLocaleTimeString(
-        "en-IN",
-        {
-            hour: "numeric",
-            minute: "2-digit",
-        }
-    );
 
     return (
         <div
@@ -51,15 +44,6 @@ export default function MealCard({ meal }: Props) {
                         {meal.mealType} • {meal.quantity} {meal.unit}
                     </p>
                 </div>
-
-                <span
-                    style={{
-                        fontSize: "14px",
-                        color: "#777",
-                    }}
-                >
-                    🕒 {loggedTime}
-                </span>
             </div>
 
             <hr

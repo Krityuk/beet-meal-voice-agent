@@ -16,7 +16,7 @@ export default function MealList() {
     }
 
     const groupedMeals = meals.reduce((groups, meal) => {
-        const date = new Date(meal.loggedAt);
+        const date = new Date(meal.consumedDate);
 
         const today = new Date();
         const yesterday = new Date();

@@ -1,11 +1,12 @@
 import Meal from "../models/Meal.js";
 import { getFoodDetails } from "./foodService.js";
 
-async function logMeal({ food, quantity, mealType }) {
+async function logMeal({ food, quantity, mealType, consumedDate }) {
     const mealDetails = getFoodDetails(
         food,
         quantity,
-        mealType
+        mealType,
+        consumedDate,
     );
 
     const meal = new Meal(mealDetails);
@@ -24,19 +25,19 @@ async function getMeals({ food, startDate, endDate, limit } = {}) {
     }
 
     if (startDate || endDate) {
-        filter.loggedAt = {};
+        filter.consumedDate = {};
 
         if (startDate) {
-            filter.loggedAt.$gte = new Date(startDate);
+            filter.consumedDate.$gte = new Date(startDate);
         }
 
         if (endDate) {
-            filter.loggedAt.$lte = new Date(endDate);
+            filter.consumedDate.$lte = new Date(endDate);
         }
     }
 
     let query = Meal.find(filter)
-        .sort({ loggedAt: -1 })
+        .sort({ consumedDate: -1 })
         .lean();
 
     if (limit) {
@@ -56,7 +57,8 @@ async function updateMeal(mealId, updates) {
     const mealDetails = getFoodDetails(
         updates.food ?? meal.foodName,
         updates.quantity ?? meal.quantity,
-        updates.mealType ?? meal.mealType
+        updates.mealType ?? meal.mealType,
+        updates.consumedDate ?? meal.consumedDate,
     );
 
     Object.assign(meal, mealDetails);

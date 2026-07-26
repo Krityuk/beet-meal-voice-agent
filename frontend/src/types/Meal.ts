@@ -15,4 +15,5 @@ export interface Meal {
     mealType: string;
     nutrition: Nutrition;
     loggedAt: string;
+    consumedDate:string
 }

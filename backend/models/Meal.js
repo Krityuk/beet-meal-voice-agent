@@ -70,7 +70,10 @@ const mealSchema = new mongoose.Schema(
             type: nutritionSchema,
             required: true,
         },
-
+        consumedDate: {
+            type: Date,
+            required: true,
+        },
         loggedAt: {
             type: Date,
             default: Date.now,
@@ -84,8 +87,10 @@ const mealSchema = new mongoose.Schema(
 // INDEXING ON MONGO DATABASE
 mealSchema.index({ foodId: 1 }); // indexed at foodId in asc order, because user can ask all banana meals enlist
 
-mealSchema.index({ loggedAt: -1 }); // indexed at loggedAt in desc order because user can ask for recent 5 meals,
+mealSchema.index({ consumedDate: -1 }); // indexed at consumedDate in desc order because user can ask for recent 5 meals,
 // Although modern mongodb can do reverse traverse as well so -1 is only for readability, B-Tree keeps the keys in sorted order
+
+mealSchema.index({ foodId: 1, consumedDate: -1 });
 
 const Meal = mongoose.model("Meal", mealSchema);
 
