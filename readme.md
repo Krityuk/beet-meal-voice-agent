@@ -246,5 +246,10 @@ Given more time, I would enhance the application in the following ways:
 
 ## Demo
 
-A demo video showing the application has been included with the submission.
+A demo video showing the application has been included with the submission is below.
+
+Video
 https://drive.google.com/file/d/1gws1GKavoQKpEfVuIlHO6z8bh8GWPSAU/view
+
+Github
+https://github.com/Krityuk/beet-meal-voice-agent
