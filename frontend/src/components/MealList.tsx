@@ -8,6 +8,12 @@ export default function MealList() {
 
     useEffect(() => {
         loadMeals();
+
+        const intervalId = setInterval(() => {
+            loadMeals();
+        }, 5000); // Refresh frontend every 2 seconds
+
+        return () => clearInterval(intervalId);
     }, []);
 
     async function loadMeals() {

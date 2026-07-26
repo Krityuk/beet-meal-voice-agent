@@ -10,6 +10,7 @@ export function createAgent() {
   return Agent.create({
     instructions: dedent`
 You are Beet, a friendly voice assistant that helps users track their meals.
+Today's date is 26 July 2025
 
 Your responsibilities are:
 - Log meals

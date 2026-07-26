@@ -238,7 +238,7 @@ Given more time, I would enhance the application in the following ways:
 
 - **Automated testing:** Add comprehensive unit, integration, and end-to-end tests to improve reliability and simplify future maintenance.
 
-- **Enhance frontend UI/UX** Add WebRTC, Pagination, Lazy Loading, WCAG-guidelines, Animations
+- **Enhance frontend UI/UX**  Pagination, Lazy Loading, WCAG-guidelines, Animations
 
 - **Enhanced natural language understanding:** Expand support for more complex date expressions and multi-step conversational requests.
 
@@ -247,3 +247,4 @@ Given more time, I would enhance the application in the following ways:
 ## Demo
 
 A demo video showing the application has been included with the submission.
+https://drive.google.com/file/d/1gws1GKavoQKpEfVuIlHO6z8bh8GWPSAU/view
