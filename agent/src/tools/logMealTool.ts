@@ -35,10 +35,7 @@ Extract the food name, quantity, and meal type and date from the conversation.
             .describe("Date in YYYY-MM-DD format. Resolve natural language dates like today or yesterday before calling."),
     }),
     execute: async ({ food, quantity, mealType, consumedDate }) => {
-        console.log("========== logMealTool CALLED ==========");
-        console.log({ food, quantity, mealType, consumedDate, });
         try {
-            console.log(" Initializing data 🫠🫠🫠🫠")
             const data: { food: string; quantity?: number; mealType?: string; consumedDate?: string }
                 = { food };
 

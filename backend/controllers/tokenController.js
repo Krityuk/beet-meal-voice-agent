@@ -30,7 +30,7 @@ const createToken = async (req, res) => {
             room,
         });
 
-        dispatchAgent(room);
+        // dispatchAgent(room);
 
     } catch (error) {
         console.error("Error generating token:", error);
@@ -42,48 +42,48 @@ const createToken = async (req, res) => {
     }
 };
 
-const dispatchAgent = async (room) => {
-    const dispatchClient = new AgentDispatchClient(
-        process.env.LIVEKIT_URL,
-        process.env.LIVEKIT_API_KEY,
-        process.env.LIVEKIT_API_SECRET
-    );
+// const dispatchAgent = async (room) => {
+//     const dispatchClient = new AgentDispatchClient(
+//         process.env.LIVEKIT_URL,
+//         process.env.LIVEKIT_API_KEY,
+//         process.env.LIVEKIT_API_SECRET
+//     );
 
-    const timeout = 10_000;
-    const retryInterval = 1000;
-    const startTime = Date.now();
+//     const timeout = 10_000;
+//     const retryInterval = 1000;
+//     const startTime = Date.now();
 
-    while (Date.now() - startTime < timeout) {
-        try {
-            await dispatchClient.createDispatch(
-                room,
-                "my-agent"
-            );
+//     while (Date.now() - startTime < timeout) {
+//         try {
+//             await dispatchClient.createDispatch(
+//                 room,
+//                 "my-agent"
+//             );
 
-            console.log("✅ Agent dispatched successfully");
-            return;
+//             console.log("✅ Agent dispatched successfully");
+//             return;
 
-        } catch (err) {
-            if (
-                err?.message?.includes("room does not exist") ||
-                err?.message?.includes("requested room does not exist")
-            ) {
-                console.log("⏳ Room not ready. Retrying...");
+//         } catch (err) {
+//             if (
+//                 err?.message?.includes("room does not exist") ||
+//                 err?.message?.includes("requested room does not exist")
+//             ) {
+//                 console.log("⏳ Room not ready. Retrying...");
 
-                await new Promise(resolve =>
-                    setTimeout(resolve, retryInterval)
-                );
-                continue;
-            }
+//                 await new Promise(resolve =>
+//                     setTimeout(resolve, retryInterval)
+//                 );
+//                 continue;
+//             }
 
-            console.error("❌ Dispatch failed:", err);
-            return;
-        }
-    }
+//             console.error("❌ Dispatch failed:", err);
+//             return;
+//         }
+//     }
 
-    console.error(
-        "❌ Failed to dispatch agent within 10 seconds"
-    );
-};
+//     console.error(
+//         "❌ Failed to dispatch agent within 10 seconds"
+//     );
+// };
 
 export { createToken };

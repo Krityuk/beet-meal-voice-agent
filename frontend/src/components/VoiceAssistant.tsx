@@ -1,4 +1,4 @@
-import { LiveKitRoom, RoomAudioRenderer, StartAudio, } from "@livekit/components-react";
+import { LiveKitRoom, RoomAudioRenderer, StartAudio, VideoConference, } from "@livekit/components-react";
 
 interface Props {
     token: string;
@@ -13,9 +13,10 @@ export default function VoiceAssistant({ token, serverUrl, onConnected }: Props)
             serverUrl={serverUrl}
             connect={true}
             audio={true}
-            video={false}
+            video={true}
             onConnected={onConnected}
         >
+            <VideoConference />
             <RoomAudioRenderer />
             <StartAudio label="Enable Audio" />
         </LiveKitRoom>

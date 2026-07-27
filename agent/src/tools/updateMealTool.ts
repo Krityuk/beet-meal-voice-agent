@@ -53,7 +53,6 @@ Resolve natural language dates such as "today", "yesterday",
     }),
 
     execute: async ({ oldFood, newFood, quantity, startDate, endDate, }) => {
-        console.log(startDate, endDate, "These are dates generated in updateMealTool 💵💵💵💵")
         try {
             let dateRange;
 
@@ -65,7 +64,6 @@ Resolve natural language dates such as "today", "yesterday",
                     endDate: startDate,
                 };
             }
-            console.log(dateRange, "These are dates generated in updateMealTool 💵💵💵💵")
 
             const matches = await findMatchingMeals(oldFood, dateRange);
 

@@ -4,6 +4,8 @@ import dotenv from 'dotenv';
 import { fileURLToPath } from 'node:url';
 import { createAgent } from './agent.ts';
 
+// import * as anam from "@livekit/agents-plugin-anam";
+
 // Load environment variables from a local file.
 // Make sure to set LIVEKIT_URL, LIVEKIT_API_KEY, and LIVEKIT_API_SECRET
 // when running locally or self-hosting your agent server.
@@ -50,15 +52,16 @@ export default defineAgent({
       },
     });
 
-    // // Add a virtual avatar to the session, if desired
-    // // For other providers, see https://docs.livekit.io/agents/models/avatar/
+    // Add a virtual avatar to the session, if desired
+    // For other providers, see https://docs.livekit.io/agents/models/avatar/
     // const avatar = new anam.AvatarSession({
     //   personaConfig: {
-    //     name: '...',
-    //     avatarId: '...', // See https://docs.livekit.io/agents/models/avatar/plugins/anam
+    //     name: "Beet Nutrition Coach",
+    //     personaId: process.env.ANAM_PERSONA_ID!,
     //   },
     // });
-    // // Start the avatar and wait for it to join
+
+    // Start the avatar and wait for it to join
     // await avatar.start(session, ctx.room);
 
     // Join the room and connect to the user

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import MealList from "./components/MealList";
 import VoiceAssistant from "./components/VoiceAssistant";
-import { getLiveKitToken } from "./api/meals";
+import { dispatchAgent, getLiveKitToken } from "./api/meals";
 import { VoiceAssistantStatus, type VoiceAssistantStatus as VoiceAssistantStatusType, } from "./enums/VoiceAssistantStatus";
 
 export default function App() {
@@ -9,6 +9,7 @@ export default function App() {
     const [token, setToken] = useState("");
     const [url, setUrl] = useState("");
     const [status, setStatus] = useState<VoiceAssistantStatusType>(VoiceAssistantStatus.IDLE);
+    const [room, setRoom] = useState("");
 
     async function connectVoiceAssistant() {
         setStatus(VoiceAssistantStatus.CONNECTING);
@@ -17,8 +18,8 @@ export default function App() {
 
         setToken(response.token);
         setUrl(response.url);
+        setRoom(response.room);
     }
-
     return (
         <div style={{ maxWidth: "700px", margin: "40px auto" }}>
             <h1>Beet Meal Tracker</h1>
@@ -43,7 +44,9 @@ export default function App() {
                 <VoiceAssistant
                     token={token}
                     serverUrl={url}
-                    onConnected={() => setStatus(VoiceAssistantStatus.READY)}
+                    onConnected={async () => {
+                        await dispatchAgent(room); // when connected to room, dispatch agent into room and set status=ready
+                        setStatus(VoiceAssistantStatus.READY)}}
                 />
             )}
 

@@ -4,6 +4,7 @@ import cors from "cors";
 
 import mealRoutes from "./routes/mealRoutes.js";
 import tokenRoutes from "./routes/tokenRoutes.js";
+import dispatchAgentRoutes from "./routes/dispatchAgentRoutes.js";
 
 const app = express();
 
@@ -14,6 +15,7 @@ app.use(cors());
 // Routes
 app.use("/api/meals", mealRoutes);
 app.use("/api/token", tokenRoutes);
+app.use("/api/dispatchAgent", dispatchAgentRoutes);
 
 // Test Route
 app.get("/", (req, res) => {

@@ -23,7 +23,6 @@ async function getMealsController(req, res) {
     console.log("Inside getMealsController 🫠🫠🫠🫠");
     try {
         const { food, startDate, endDate } = req.query;
-        console.log(food, startDate, endDate, "is dateRange in getMealsController 🫠🫠🫠🫠");
 
         const meals = await getMeals({
             food,
