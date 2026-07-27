@@ -96,4 +96,115 @@ describe('agent evaluation', () => {
     // Assert that there are no unexpected further events
     result.expect.noMoreEvents();
   });
+
+  // Evaluation of log a meal
+  it("logs a meal", { timeout: 30000 }, async () => {
+    const result = await session
+      .run({ userInput: "I ate two bananas for breakfast" })
+      .wait();
+
+    result.expect
+      .nextEvent()
+      .isFunctionCall({
+        name: "logMealTool",
+      });
+
+    result.expect
+      .nextEvent()
+      .isFunctionCallOutput();
+
+    await result.expect
+      .nextEvent()
+      .isMessage({ role: "assistant" })
+      .judge(judgeLlm, {
+        intent: `
+      Confirms that the meal was logged successfully.
+    `,
+      });
+
+    result.expect.noMoreEvents();
+  });
+
+  it("gets meals", { timeout: 30000 }, async () => {
+    const result = await session
+      .run({ userInput: "What did I ate on 17 july 2024?" })
+      .wait();
+
+    // Tool invocation
+    result.expect
+      .nextEvent()
+      .isFunctionCall({ name: "getMealsTool" });
+
+    // Tool response
+    result.expect
+      .nextEvent()
+      .isFunctionCallOutput();
+
+    // Assistant reply
+    await result.expect
+      .nextEvent()
+      .isMessage({ role: "assistant" })
+      .judge(judgeLlm, {
+        intent: `
+      statement about a meal consumed.
+    `,
+      });
+
+    result.expect.noMoreEvents();
+  });
+
+  it("updates a meal", { timeout: 30000 }, async () => {
+    const result = await session
+      .run({ userInput: "Update dosa I ate on 17 july 2024 count increment by one" })
+      .wait();
+
+    // 1. Search existing meal
+    result.expect
+      .nextEvent()
+      .isFunctionCall({ name: "getMealsTool" });
+
+    // 2. Search result
+    result.expect
+      .nextEvent()
+      .isFunctionCallOutput();
+
+    // 3. Update meal
+    result.expect
+      .nextEvent()
+      .isFunctionCall({ name: "updateMealTool" });
+
+    // 4. Update result
+    result.expect
+      .nextEvent()
+      .isFunctionCallOutput();
+
+    // 5. Final assistant response
+    await result.expect
+      .nextEvent()
+      .isMessage({ role: "assistant" })
+      .judge(judgeLlm, {
+        intent: "Confirms that the meal was updated successfully.",
+      });
+
+    result.expect.noMoreEvents();
+  });
+
+  it("handles unrelated requests", { timeout: 30000 }, async () => {
+    const result = await session
+      .run({ userInput: "Book me a flight to Delhi" })
+      .wait();
+
+    await result.expect
+      .nextEvent()
+      .isMessage({ role: "assistant" })
+      .judge(judgeLlm, {
+        intent: `
+        The assistant should explain that it only
+        helps with meal tracking.
+      `,
+      });
+
+    result.expect.noMoreEvents();
+  });
+
 });
