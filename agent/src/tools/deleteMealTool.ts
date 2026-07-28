@@ -58,7 +58,7 @@ Resolve natural language dates like "today", "yesterday",
             const matches = await findMatchingMeals(food, dateRange);
 
             if (matches.length === 0) {
-                return `I couldn't find any meal containing "${food}".`;
+                return `I couldn't find any meal logs containing "${food}".`;
             }
 
             if (matches.length > 1) {

@@ -4,13 +4,14 @@ import { logMealTool } from "./tools/logMealTool.ts";
 import { getMealsTool } from "./tools/getMealsTool.ts";
 import { updateMealTool } from './tools/updateMealTool.ts';
 import { deleteMealTool } from './tools/deleteMealTool.ts';
+import { getTodaysDate } from './utils/date.ts';
 
 // Build a custom voice AI assistant with the functional `Agent.create` API
 export function createAgent() {
   return Agent.create({
     instructions: dedent`
 You are Beet, a friendly voice assistant that helps users track their meals.
-Today's date is 26 July 2025
+Today's date is ${getTodaysDate()}
 
 Your responsibilities are:
 - Log meals

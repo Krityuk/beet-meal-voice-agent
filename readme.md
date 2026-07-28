@@ -244,6 +244,8 @@ Given more time, I would enhance the application in the following ways:
 
 - **Deployment and monitoring:** Deploy the application with CI/CD, logging, and monitoring for easier maintenance and production readiness.
 
+- **Date-Time-Zone:** Currently agent will assume the timezone of of that server where agent is deployed, Becasue we are fetching DateTime.Now in agent folder. If user is in different timezone, it will still use server timezone. We can store date into {user_id,Country_Name} and {Country_Name,TimeZone} into database tables.
+
 ## Demo
 
 A demo video showing the application has been included with the submission is below.
