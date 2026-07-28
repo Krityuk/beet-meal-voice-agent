@@ -1,4 +1,6 @@
-const BASE_URL = "http://localhost:5000/api/meals";
+import { API_ENDPOINTS } from "./config.ts";
+
+const BASE_URL = API_ENDPOINTS.meals;
 
 async function createMeal(data: { food: string; quantity?: number; mealType?: string; consumedDate?: string, }) {
     const response = await fetch(BASE_URL, {

@@ -1,10 +1,13 @@
 import { logMeal, getMeals, updateMeal, deleteMeal, } from "../services/mealService.js";
+import { notifyClients } from "../utils/sse.js";
 
 async function logMealController(req, res) {
     console.log("Inside logMealController 🫠🫠🫠🫠");
     console.log(req.body, "is req.body 🫠🫠🫠🫠");
     try {
         const meal = await logMeal(req.body);
+
+        notifyClients();
 
         res.status(201).json({
             success: true,
@@ -52,6 +55,8 @@ async function updateMealController(req, res) {
             req.body
         );
 
+        notifyClients();
+
         res.status(200).json({
             success: true,
             message: "Meal updated successfully",
@@ -72,11 +77,13 @@ async function deleteMealController(req, res) {
         const deletedMeal = await deleteMeal(mealId);
 
         if (!deletedMeal) {
-            return {
+            return res.status(404).json({
                 success: false,
                 message: "No such meal found for this timeline."
-            };
+            });
         }
+
+        notifyClients();
 
         res.status(200).json({
             success: true,

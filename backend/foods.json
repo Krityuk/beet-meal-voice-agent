@@ -531,7 +531,8 @@
       "aliases": [
         "banana",
         "kela",
-        "ripe banana"
+        "ripe banana",
+        "bananas"
       ],
       "category": "fruit",
       "unit": "piece",
@@ -549,7 +550,8 @@
       "name": "Apple",
       "aliases": [
         "apple",
-        "seb"
+        "seb",
+        "apples"
       ],
       "category": "fruit",
       "unit": "piece",
