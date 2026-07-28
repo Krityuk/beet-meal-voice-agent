@@ -1,15 +1,15 @@
 import { useState } from "react";
 import MealList from "./components/MealList";
 import VoiceAssistant from "./components/VoiceAssistant";
-import { dispatchAgent, getLiveKitToken } from "./api/meals";
+import { getLiveKitToken } from "./api/meals";
 import { VoiceAssistantStatus, type VoiceAssistantStatus as VoiceAssistantStatusType, } from "./enums/VoiceAssistantStatus";
 
 export default function App() {
 
     const [token, setToken] = useState("");
     const [url, setUrl] = useState("");
-    const [status, setStatus] = useState<VoiceAssistantStatusType>(VoiceAssistantStatus.IDLE);
     const [room, setRoom] = useState("");
+    const [status, setStatus] = useState<VoiceAssistantStatusType>(VoiceAssistantStatus.IDLE);
 
     async function connectVoiceAssistant() {
         setStatus(VoiceAssistantStatus.CONNECTING);
@@ -44,9 +44,8 @@ export default function App() {
                 <VoiceAssistant
                     token={token}
                     serverUrl={url}
-                    onConnected={async () => {
-                        await dispatchAgent(room); // when connected to room, dispatch agent into room and set status=ready
-                        setStatus(VoiceAssistantStatus.READY)}}
+                    room={room}
+                    setStatus = {setStatus}
                 />
             )}
 

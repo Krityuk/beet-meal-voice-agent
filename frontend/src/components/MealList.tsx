@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { getMeals } from "../api/meals";
 import MealCard from "./MealCard";
 import type { Meal } from "../types/Meal";
+import { API_ENDPOINTS } from "../constants/api";
 
 export default function MealList() {
     const [meals, setMeals] = useState<Meal[]>([]);
@@ -9,11 +10,17 @@ export default function MealList() {
     useEffect(() => {
         loadMeals();
 
-        const intervalId = setInterval(() => {
-            loadMeals();
-        }, 5000); // Refresh frontend every 2 seconds
+        const eventSource = new EventSource(
+            API_ENDPOINTS.EVENTS
+        ); // For SSE, we dont call fetch(url), instead we call new EventSource(url);
 
-        return () => clearInterval(intervalId);
+        eventSource.onmessage = () => { // In SSE we dont get response, we get eventSource.onmessage
+            loadMeals();
+        };
+
+        return () => { // return inside useEffect is for cleanUps
+            eventSource.close();
+        };
     }, []);
 
     async function loadMeals() {
