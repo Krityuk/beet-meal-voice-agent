@@ -25,7 +25,7 @@ Extract the food name, quantity, and meal type and date from the conversation.
     ,
     parameters: z.object({
         food: z.string().describe("Name of the food eaten"),
-        quantity: z.number().positive().describe("Quantity of the food."),
+        quantity: z.number().positive().default(1).describe("Quantity of the food."),
         mealType: z
             .enum(["breakfast", "lunch", "dinner", "snack"])
             .optional(),
@@ -36,17 +36,11 @@ Extract the food name, quantity, and meal type and date from the conversation.
     }),
     execute: async ({ food, quantity, mealType, consumedDate }) => {
         try {
-            const data: { food: string; quantity?: number; mealType?: string; consumedDate?: string }
-                = { food };
-
-            if (quantity)
-                data.quantity = quantity;
+            const data: { food: string; quantity: number; mealType?: string; consumedDate: string }
+                = { food , quantity, consumedDate};
 
             if (mealType) {
                 data.mealType = mealType;
-            }
-            if (consumedDate) {
-                data.consumedDate = consumedDate;
             }
 
             const result = await createMeal(data);

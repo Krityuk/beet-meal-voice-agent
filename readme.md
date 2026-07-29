@@ -188,10 +188,6 @@ MongoDB
 
 Instead of allowing the LLM to directly manipulate the database, all database operations are performed through tools. This keeps the assistant reliable and makes backend operations deterministic.
 
-### Two-step update flow
-
-Updating a meal first searches for the matching meal and then updates it by ID. This allows the assistant to identify the correct record and handle ambiguous user requests gracefully.
-
 ### Separate consumedDate and loggedAt
 
 The application stores:
@@ -232,8 +228,6 @@ Examples include:
 
 Given more time, I would enhance the application in the following ways:
 
-- **Support bulk operations:** Currently, the assistant handles one update or delete operation at a time. I would extend it to support requests such as *"Delete all meals from yesterday"* or *"Update all breakfast entries for today"*.
-
 - **User authentication and data isolation:** The current implementation stores meal logs without user authentication, so all logs are shared. I would introduce user authentication (e.g., JWT/sessionId) and associate each meal with a `userId`, ensuring every user can access and manage only their own meal history.
 
 - **Automated testing:** Add comprehensive unit, integration, and end-to-end tests to improve reliability and simplify future maintenance.
@@ -244,7 +238,10 @@ Given more time, I would enhance the application in the following ways:
 
 - **Deployment and monitoring:** Deploy the application with CI/CD, logging, and monitoring for easier maintenance and production readiness.
 
-- **Date-Time-Zone:** Currently agent will assume the timezone of of that server where agent is deployed, Becasue we are fetching DateTime.Now in agent folder. If user is in different timezone, it will still use server timezone. We can store date into {user_id,Country_Name} and {Country_Name,TimeZone} into database tables.
+- **Date-Time-Zone:** Currently agent will use the timezone of of that server where agent is deployed, Becasue we are fetching DateTime.Now() in agent folder. If user is in different timezone, it will still use server timezone. We can store date into {user_id,Country_Name} and {Country_Name,TimeZone} into database tables.
+
+- **Database Normalisation** Currently each doc in `meals` collection is having quantity and nutrition both, Nutrition storing there is redundant. We can do normalisation.
+- "Concurrency Control" Suppose two devices simultaneosuly tell agent to increment apple count by 1, so we should use version_key of mongodb docs to do optimistic locking. If conflicts are frequent then do distributed locking  i.e.. redis, by await redis.set(`meal:${mealId}`, "locked", { NX:true, EX:10 }); method
 
 ## Demo
 

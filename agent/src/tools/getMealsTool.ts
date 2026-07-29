@@ -34,14 +34,18 @@ const getMealsTool = llm.tool({
             .describe(
                 "End date in YYYY-MM-DD format."
             ),
+        mealType: z
+            .enum(["breakfast", "lunch", "dinner", "snack"])
+            .optional()
     }),
 
-    execute: async ({ food, startDate, endDate }) => {
+    execute: async ({ food, startDate, endDate, mealType }) => {
         try {
             const params: {
                 food?: string;
                 startDate?: string;
                 endDate?: string;
+                mealType?: string
             } = {};
 
             if (food) {
@@ -55,6 +59,8 @@ const getMealsTool = llm.tool({
             if (endDate) {
                 params.endDate = endDate;
             }
+            if(mealType)
+                params.mealType = mealType;
 
             const result = await getMeals(params);
 

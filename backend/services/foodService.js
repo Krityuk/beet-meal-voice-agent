@@ -33,14 +33,6 @@ function searchFood(query) {
     );
 }
 
-function getFoodById(foodId) { // String foodId of foods.json
-    if (!foodId) return null;
-
-    return (
-        foods.find((food) => food.id.toLowerCase() === foodId.toLowerCase()) ||
-        null
-    );
-}
 
 function calculateNutrition(food, quantity) {
     if (!quantity || quantity <= 0) {
@@ -58,7 +50,7 @@ function calculateNutrition(food, quantity) {
     };
 }
 
-function getFoodDetails(query, quantity, mealType = null, consumedDate) {
+function getFoodDetails(query, quantity, mealType, consumedDate) {
     const food = searchFood(query);
 
     if (!food) {
@@ -83,7 +75,6 @@ function getFoodDetails(query, quantity, mealType = null, consumedDate) {
 
 export {
     searchFood,
-    getFoodById,
     calculateNutrition,
     getFoodDetails,
 };

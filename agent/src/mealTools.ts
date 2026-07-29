@@ -19,7 +19,7 @@ async function createMeal(data: { food: string; quantity?: number; mealType?: st
     return response.json();
 }
 
-async function getMeals(params?: { food?: string; startDate?: string; endDate?: string; }) {
+async function getMeals(params?: { food?: string; startDate?: string; endDate?: string; mealType?: string }) {
     const query = new URLSearchParams();
 
     if (params?.food) {
@@ -32,6 +32,9 @@ async function getMeals(params?: { food?: string; startDate?: string; endDate?: 
 
     if (params?.endDate) {
         query.append("endDate", params.endDate);
+    }
+    if (params?.mealType) {
+        query.append("mealType", params.mealType);
     }
 
     const url = query.toString()
@@ -48,8 +51,9 @@ async function getMeals(params?: { food?: string; startDate?: string; endDate?: 
     return response.json();
 }
 
-async function updateMeal(mealId: string, data: { food?: string; quantity?: number; }) {
-    const response = await fetch(`${BASE_URL}/${mealId}`, {
+async function updateMeals(oldFood?: string, newFood?: string, mealType?: string, quantity?: number, startDate?: string, endDate?: string) {
+    const data = { food: oldFood, newFood, mealType, quantity, startDate, endDate };
+    const response = await fetch(BASE_URL, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json",
@@ -65,10 +69,16 @@ async function updateMeal(mealId: string, data: { food?: string; quantity?: numb
     return response.json();
 }
 
-async function deleteMeal(mealId: string) {
-    const response = await fetch(`${BASE_URL}/${mealId}`, {
+async function deleteMeals(food?: string, mealType?: string, startDate?: string, endDate?: string) {
+    const data = { food, mealType, startDate, endDate };
+    const response = await fetch(BASE_URL, {
         method: "DELETE",
-    });
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+    }
+    );
 
     if (!response.ok) {
         const error = await response.json();
@@ -101,7 +111,7 @@ async function findMatchingMeals(food?: string, dateRange?: { startDate: string;
 export {
     createMeal,
     getMeals,
-    updateMeal,
-    deleteMeal,
-    findMatchingMeals,
+    updateMeals,
+    deleteMeals,
+    // findMatchingMeals,
 };

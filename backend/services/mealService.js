@@ -1,5 +1,6 @@
 import Meal from "../models/Meal.js";
 import { getFoodDetails } from "./foodService.js";
+import { log } from "../utils/logger.js";
 
 async function logMeal({ food, quantity, mealType, consumedDate }) {
     const mealDetails = getFoodDetails(
@@ -16,7 +17,7 @@ async function logMeal({ food, quantity, mealType, consumedDate }) {
     return meal;
 }
 
-async function getMeals({ food, startDate, endDate, limit } = {}) {
+async function getMeals({ food, startDate, endDate, mealType } = {}) {
 
     const filter = {};
 
@@ -40,47 +41,88 @@ async function getMeals({ food, startDate, endDate, limit } = {}) {
         .sort({ consumedDate: -1 })
         .lean();
 
-    if (limit) {
-        query = query.limit(limit);
-    }
 
     return query;
 }
 
-async function updateMeal(mealId, updates) {
-    const meal = await Meal.findById(mealId);
+async function updateMeals({ food, newFood, mealType, quantity, startDate, endDate, }) {
+    const filter = {};
 
-    if (!meal) {
-        throw new Error("Meal not found");
+    if (food) {
+        filter.foodName = {
+            $regex: new RegExp(`^${food}$`, "i"),
+        };
     }
 
-    const mealDetails = getFoodDetails(
-        updates.food ?? meal.foodName,
-        updates.quantity ?? meal.quantity,
-        updates.mealType ?? meal.mealType,
-        updates.consumedDate ?? meal.consumedDate,
-    );
+    if (mealType) {
+        filter.mealType = mealType;
+    }
 
-    Object.assign(meal, mealDetails);
+    if (startDate && endDate) {
+        filter.consumedDate = {
+            $gte: new Date(startDate),
+            $lte: new Date(endDate),
+        };
+    }
 
-    await meal.save();
+    const meals = await Meal.find(filter);
+    log(meals);
 
-    return meal;
+    if (meals.length === 0) {
+        throw new Error("No matching meals found.");
+    }
+
+    const operations = meals.map(meal => {
+
+        const updatedMeal = getFoodDetails(
+            newFood ?? meal.foodName,
+            quantity ?? meal.quantity,
+            mealType ?? meal.mealType,
+            meal.consumedDate
+        );
+
+        return {
+            updateOne: {
+                filter: { _id: meal._id },
+                update: {
+                    $set: updatedMeal,
+                },
+            },
+        };
+    });
+
+    const result = await Meal.bulkWrite(operations);
+
+    return result;
 }
 
-async function deleteMeal(mealId) {
-    const meal = await Meal.findByIdAndDelete(mealId);
+async function deleteMeals({ food, mealType, startDate, endDate }) {
 
-    if (!meal) {
-        throw new Error("Meal not found");
+    const filter = {};
+
+    if (food) {
+        filter.foodName = {
+            $regex: new RegExp(`^${food}$`, "i"),
+        };
     }
 
-    return meal;
+    if (mealType) {
+        filter.mealType = mealType;
+    }
+
+    if (startDate && endDate) {
+        filter.consumedDate = {
+            $gte: new Date(startDate),
+            $lte: new Date(endDate),
+        };
+    }
+
+    return await Meal.deleteMany(filter);
 }
 
 export {
     logMeal,
     getMeals,
-    updateMeal,
-    deleteMeal,
+    updateMeals,
+    deleteMeals,
 };

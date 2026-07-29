@@ -1,6 +1,6 @@
 import { llm } from "@livekit/agents";
 import { z } from "zod";
-import { findMatchingMeals, updateMeal } from "../mealTools.ts";
+import { updateMeals } from "../mealTools.ts";
 
 const updateMealTool = llm.tool({
     description: `
@@ -31,6 +31,10 @@ Resolve natural language dates such as "today", "yesterday",
             .optional()
             .describe("The new food to replace the existing food."),
 
+            mealType: z
+            .enum(["breakfast", "lunch", "dinner", "snack"])
+            .optional(),
+
         quantity: z
             .number()
             .positive()
@@ -52,44 +56,19 @@ Resolve natural language dates such as "today", "yesterday",
             ),
     }),
 
-    execute: async ({ oldFood, newFood, quantity, startDate, endDate, }) => {
+    execute: async ({ oldFood, newFood, mealType, quantity, startDate, endDate, }) => {
         try {
-            let dateRange;
+            if(!endDate)
+                endDate = startDate;
 
-            if (startDate && endDate) {
-                dateRange = { startDate, endDate };
-            } else if (startDate) {
-                dateRange = {
-                    startDate,
-                    endDate: startDate,
-                };
-            }
-
-            const matches = await findMatchingMeals(oldFood, dateRange);
-
-            if (matches.length === 0) {
-                return `I couldn't find any meal containing "${oldFood}".`;
-            }
-
-            if (matches.length > 1) {
-                return `I found multiple meals containing "${oldFood}". Please specify which one you want to update.`;
-            }
-
-            const meal = matches[0];
-
-            const data: { food?: string; quantity?: number; } = {};
-
-            if (newFood) {
-                data.food = newFood;
-            }
-
-            if (quantity !== undefined) {
-                data.quantity = quantity;
-            }
-
-            const result = await updateMeal(meal._id, data);
-
-            return result;
+            return await updateMeals(
+                oldFood,
+                newFood,
+                mealType,
+                quantity,
+                startDate,
+                endDate,
+            );
         } catch (error) {
             return {
                 success: false,

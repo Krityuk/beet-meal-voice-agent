@@ -7,9 +7,9 @@ router.post("/", logMealController);
 
 router.get("/", getMealsController);
 
-router.put("/:mealId", updateMealController);
+router.put("/", updateMealController);
 
-router.delete("/:mealId", deleteMealController);
+router.delete("/", deleteMealController);
 
 export default router;
 

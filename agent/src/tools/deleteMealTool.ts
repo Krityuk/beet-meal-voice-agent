@@ -1,6 +1,6 @@
 import { llm } from "@livekit/agents";
 import { z } from "zod";
-import { deleteMeal, findMatchingMeals } from "../mealTools.ts";
+import { deleteMeals } from "../mealTools.ts";
 
 const deleteMealTool = llm.tool({
     description: `
@@ -25,6 +25,7 @@ Resolve natural language dates like "today", "yesterday",
     parameters: z.object({
         food: z
             .string()
+            .optional()
             .describe("The food to delete."),
 
         startDate: z
@@ -40,36 +41,18 @@ Resolve natural language dates like "today", "yesterday",
             .describe(
                 "End date in YYYY-MM-DD format if the user specifies a time period."
             ),
+        mealType: z
+            .enum(["breakfast", "lunch", "dinner", "snack"])
+            .optional(),
     }),
 
-    execute: async ({ food, startDate, endDate }) => {
+    execute: async ({ food, mealType, startDate, endDate, }) => {
         try {
-            let dateRange;
+            if (!endDate)
+                endDate = startDate;
 
-            if (startDate && endDate) {
-                dateRange = { startDate, endDate };
-            } else if (startDate) {
-                dateRange = {
-                    startDate,
-                    endDate: startDate,
-                };
-            }
+            return await deleteMeals(food, mealType, startDate, endDate,);
 
-            const matches = await findMatchingMeals(food, dateRange);
-
-            if (matches.length === 0) {
-                return `I couldn't find any meal logs containing "${food}".`;
-            }
-
-            if (matches.length > 1) {
-                return `I found multiple meals containing "${food}". Please specify which one you want to delete.`;
-            }
-
-            const meal = matches[0];
-
-            const result = await deleteMeal(meal._id);
-
-            return result;
         } catch (error) {
             return {
                 success: false,

@@ -1,9 +1,10 @@
-import { logMeal, getMeals, updateMeal, deleteMeal, } from "../services/mealService.js";
+import { logMeal, getMeals, updateMeals, deleteMeals, } from "../services/mealService.js";
 import { notifyClients } from "../utils/sse.js";
+import { log } from "../utils/logger.js";
 
 async function logMealController(req, res) {
     console.log("Inside logMealController 🫠🫠🫠🫠");
-    console.log(req.body, "is req.body 🫠🫠🫠🫠");
+    console.log(req.body, "is req.body 💵💵💵");
     try {
         const meal = await logMeal(req.body);
 
@@ -24,13 +25,15 @@ async function logMealController(req, res) {
 
 async function getMealsController(req, res) {
     console.log("Inside getMealsController 🫠🫠🫠🫠");
+    console.log(req.body, "is req.body 💵💵💵");
     try {
-        const { food, startDate, endDate } = req.query;
+        const { food, startDate, endDate, mealType } = req.query;
 
         const meals = await getMeals({
             food,
             startDate,
             endDate,
+            mealType,
         });
 
         res.status(200).json({
@@ -47,20 +50,16 @@ async function getMealsController(req, res) {
 
 async function updateMealController(req, res) {
     console.log("Inside updateMealController 🫠🫠🫠🫠");
+    console.log(req.body, "is req.body 💵💵💵");
     try {
-        const { mealId } = req.params;
-
-        const updatedMeal = await updateMeal(
-            mealId,
-            req.body
-        );
+        const result = await updateMeals(req.body);
 
         notifyClients();
 
         res.status(200).json({
             success: true,
             message: "Meal updated successfully",
-            data: updatedMeal,
+            data: result,
         });
     } catch (error) {
         res.status(400).json({
@@ -71,10 +70,11 @@ async function updateMealController(req, res) {
 }
 
 async function deleteMealController(req, res) {
+    console.log(req.body, "is req.body 💵💵💵");
     try {
-        const { mealId } = req.params;
+        const { food, mealType, startDate, endDate } = req.body;
 
-        const deletedMeal = await deleteMeal(mealId);
+        const deletedMeal = await deleteMeals(req.body);
 
         if (!deletedMeal) {
             return res.status(404).json({
