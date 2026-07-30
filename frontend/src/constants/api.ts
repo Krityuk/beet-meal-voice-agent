@@ -7,6 +7,7 @@ export const API_ENDPOINTS = {
     MEALS: "/meals",
     TOKEN: "/token",
     DISPATCH_AGENT: "/dispatchAgent",
+    FOODS: "/foods",
 
     // SSE Endpoints
     EVENTS: `${API.BASE_URL}/events`,

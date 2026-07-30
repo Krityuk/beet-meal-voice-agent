@@ -5,6 +5,7 @@ import cors from "cors";
 import mealRoutes from "./routes/mealRoutes.js";
 import tokenRoutes from "./routes/tokenRoutes.js";
 import dispatchAgentRoutes from "./routes/dispatchAgentRoutes.js";
+import foodRoutes from "./routes/foodRoutes.js";
 
 import { addClient, removeClient } from "./utils/sse.js";
 
@@ -18,6 +19,7 @@ app.use(cors());
 app.use("/api/meals", mealRoutes);
 app.use("/api/token", tokenRoutes);
 app.use("/api/dispatchAgent", dispatchAgentRoutes);
+app.use("/api/foods", foodRoutes);
 
 // SSE Routes (whenEver some data changes in mongodb, it would reloadMeals in react app)
 app.get("/api/events", (req, res) => {

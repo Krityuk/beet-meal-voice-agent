@@ -46,12 +46,21 @@ Resolve natural language dates like "today", "yesterday",
             .optional(),
     }),
 
-    execute: async ({ food, mealType, startDate, endDate, }) => {
+    execute: async ({ food, mealType, startDate, endDate }) => {
         try {
-            if (!endDate)
-                endDate = startDate;
+            if (!endDate) endDate = startDate;
+            const data: {
+                food?: string;
+                mealType?: string;
+                startDate?: string;
+                endDate?: string;
+            } = {};
+            if(food) data.food = food;
+            if(mealType) data.mealType=mealType;    
+            if(startDate) data.startDate=startDate;
+            if(endDate) data.endDate=endDate;
 
-            return await deleteMeals(food, mealType, startDate, endDate,);
+            return await deleteMeals(data);
 
         } catch (error) {
             return {

@@ -24,6 +24,7 @@ Resolve natural language dates such as "today", "yesterday",
     parameters: z.object({
         oldFood: z
             .string()
+            .optional()
             .describe("The food currently present in the meal."),
 
         newFood: z
@@ -31,15 +32,27 @@ Resolve natural language dates such as "today", "yesterday",
             .optional()
             .describe("The new food to replace the existing food."),
 
-            mealType: z
+        oldMealType: z
             .enum(["breakfast", "lunch", "dinner", "snack"])
+            .describe("The mealType currently present in the meal")
             .optional(),
 
-        quantity: z
+        newMealType: z
+            .enum(["breakfast", "lunch", "dinner", "snack"])
+            .describe("The mealType to replace the existing mealType")
+            .optional(),
+
+        oldQuantity: z
             .number()
             .positive()
             .optional()
-            .describe("The updated quantity."),
+            .describe("The quantity currently present in the meal"),
+
+        newQuantity: z
+            .number()
+            .positive()
+            .optional()
+            .describe("The quantity to replace the existing quantity."),
 
         startDate: z
             .string()
@@ -56,19 +69,31 @@ Resolve natural language dates such as "today", "yesterday",
             ),
     }),
 
-    execute: async ({ oldFood, newFood, mealType, quantity, startDate, endDate, }) => {
+    execute: async ({ oldFood, newFood, oldMealType, newMealType, oldQuantity, newQuantity, startDate, endDate }) => {
         try {
-            if(!endDate)
-                endDate = startDate;
+            if (!endDate) endDate = startDate;
 
-            return await updateMeals(
-                oldFood,
-                newFood,
-                mealType,
-                quantity,
-                startDate,
-                endDate,
-            );
+            const data: {
+                oldFood?: string;
+                newFood?: string;
+                oldMealType?: string;
+                newMealType?: string;
+                oldQuantity?: number;
+                newQuantity?: number;
+                startDate?: string;
+                endDate?: string;
+            } = {};
+
+            if (oldFood) data.oldFood = oldFood;
+            if (newFood) data.newFood = newFood;
+            if (oldMealType) data.oldMealType = oldMealType;
+            if (newMealType) data.newMealType = newMealType;
+            if (oldQuantity) data.oldQuantity = oldQuantity;
+            if (newQuantity) data.newQuantity = newQuantity;
+            if (startDate) data.startDate = startDate;
+            if (endDate) data.endDate = endDate;
+
+            return await updateMeals(data);
         } catch (error) {
             return {
                 success: false,

@@ -39,9 +39,7 @@ Extract the food name, quantity, and meal type and date from the conversation.
             const data: { food: string; quantity: number; mealType?: string; consumedDate: string }
                 = { food , quantity, consumedDate};
 
-            if (mealType) {
-                data.mealType = mealType;
-            }
+            if (mealType) data.mealType = mealType;
 
             const result = await createMeal(data);
 

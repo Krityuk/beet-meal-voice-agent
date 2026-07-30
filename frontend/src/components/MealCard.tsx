@@ -1,10 +1,18 @@
+import type { Food } from "../types/Food";
 import type { Meal } from "../types/Meal";
 
 interface Props {
     meal: Meal;
+    food?: Food;
 }
 
-export default function MealCard({ meal }: Props) {
+export default function MealCard({ meal, food }: Props) {
+
+    const nutrition = food?.nutrition;
+    const calories = (nutrition?.calories ?? 0) * meal.quantity;
+    const protein = (nutrition?.protein ?? 0) * meal.quantity;
+    const carbs = (nutrition?.carbs ?? 0) * meal.quantity;
+    const fat = (nutrition?.fat ?? 0) * meal.quantity;
 
     return (
         <div
@@ -14,7 +22,7 @@ export default function MealCard({ meal }: Props) {
                 marginBottom: "14px",
                 boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
                 background: "#f0fdf4",
-                border: "1px solid #bbf7d0"
+                border: "1px solid #bbf7d0",
             }}
         >
             {/* Top Row */}
@@ -32,7 +40,7 @@ export default function MealCard({ meal }: Props) {
                             fontSize: "20px",
                         }}
                     >
-                        🍽️ {meal.foodName}
+                        🍽️ {food?.name ?? "Unknown Food"}
                     </h3>
 
                     <p
@@ -41,7 +49,7 @@ export default function MealCard({ meal }: Props) {
                             color: "#666",
                         }}
                     >
-                        {meal.mealType} • {meal.quantity} {meal.unit}
+                        {meal.mealType} • {meal.quantity} {food?.unit ?? ""}
                     </p>
                 </div>
             </div>
@@ -65,25 +73,25 @@ export default function MealCard({ meal }: Props) {
                 <div>
                     <strong>🔥 Calories</strong>
                     <br />
-                    {meal.nutrition.calories} kcal
+                    {calories} kcal
                 </div>
 
                 <div>
                     <strong>🥩 Protein</strong>
                     <br />
-                    {meal.nutrition.protein} g
+                    {protein} g
                 </div>
 
                 <div>
                     <strong>🍚 Carbs</strong>
                     <br />
-                    {meal.nutrition.carbs} g
+                    {carbs} g
                 </div>
 
                 <div>
                     <strong>🥑 Fat</strong>
                     <br />
-                    {meal.nutrition.fat} g
+                    {fat} g
                 </div>
             </div>
         </div>

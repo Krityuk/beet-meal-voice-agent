@@ -2,7 +2,7 @@ import { API_ENDPOINTS } from "./config.ts";
 
 const BASE_URL = API_ENDPOINTS.meals;
 
-async function createMeal(data: { food: string; quantity?: number; mealType?: string; consumedDate?: string, }) {
+async function createMeal(data: { food: string; quantity?: number; mealType?: string; consumedDate?: string }) {
     const response = await fetch(BASE_URL, {
         method: "POST",
         headers: {
@@ -22,20 +22,11 @@ async function createMeal(data: { food: string; quantity?: number; mealType?: st
 async function getMeals(params?: { food?: string; startDate?: string; endDate?: string; mealType?: string }) {
     const query = new URLSearchParams();
 
-    if (params?.food) {
-        query.append("food", params.food);
-    }
+    if (params?.food) query.append("food", params.food);
+    if (params?.startDate) query.append("startDate", params.startDate);
+    if (params?.endDate) query.append("endDate", params.endDate);
+    if (params?.mealType) query.append("mealType", params.mealType);
 
-    if (params?.startDate) {
-        query.append("startDate", params.startDate);
-    }
-
-    if (params?.endDate) {
-        query.append("endDate", params.endDate);
-    }
-    if (params?.mealType) {
-        query.append("mealType", params.mealType);
-    }
 
     const url = query.toString()
         ? `${BASE_URL}?${query.toString()}`
@@ -51,8 +42,7 @@ async function getMeals(params?: { food?: string; startDate?: string; endDate?: 
     return response.json();
 }
 
-async function updateMeals(oldFood?: string, newFood?: string, mealType?: string, quantity?: number, startDate?: string, endDate?: string) {
-    const data = { food: oldFood, newFood, mealType, quantity, startDate, endDate };
+async function updateMeals(data: { oldFood?: string; newFood?: string; oldMealType?: string; newMealType?: string; oldQuantity?: number; newQuantity?: number; startDate?: string; endDate?: string; }) {
     const response = await fetch(BASE_URL, {
         method: "PUT",
         headers: {
@@ -69,8 +59,7 @@ async function updateMeals(oldFood?: string, newFood?: string, mealType?: string
     return response.json();
 }
 
-async function deleteMeals(food?: string, mealType?: string, startDate?: string, endDate?: string) {
-    const data = { food, mealType, startDate, endDate };
+async function deleteMeals(data: {food?: string, mealType?: string, startDate?: string, endDate?: string}) {
     const response = await fetch(BASE_URL, {
         method: "DELETE",
         headers: {
@@ -86,26 +75,6 @@ async function deleteMeals(food?: string, mealType?: string, startDate?: string,
     }
 
     return response.json();
-}
-
-
-
-// THE HELPER FUNCTIONS ARE BELOW
-async function findMatchingMeals(food?: string, dateRange?: { startDate: string; endDate: string; }) {
-    const params: { food?: string; startDate?: string; endDate?: string; } = {};
-
-    if (food) {
-        params.food = food;
-    }
-
-    if (dateRange) {
-        params.startDate = dateRange.startDate;
-        params.endDate = dateRange.endDate;
-    }
-
-    const response = await getMeals(params);
-
-    return response.data;
 }
 
 export {

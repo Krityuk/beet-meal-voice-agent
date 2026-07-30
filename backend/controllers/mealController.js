@@ -25,16 +25,10 @@ async function logMealController(req, res) {
 
 async function getMealsController(req, res) {
     console.log("Inside getMealsController 🫠🫠🫠🫠");
-    console.log(req.body, "is req.body 💵💵💵");
+    console.log(req.query, "is req.query 💵💵💵");
     try {
-        const { food, startDate, endDate, mealType } = req.query;
 
-        const meals = await getMeals({
-            food,
-            startDate,
-            endDate,
-            mealType,
-        });
+        const meals = await getMeals(req.query);
 
         res.status(200).json({
             success: true,
@@ -72,8 +66,6 @@ async function updateMealController(req, res) {
 async function deleteMealController(req, res) {
     console.log(req.body, "is req.body 💵💵💵");
     try {
-        const { food, mealType, startDate, endDate } = req.body;
-
         const deletedMeal = await deleteMeals(req.body);
 
         if (!deletedMeal) {

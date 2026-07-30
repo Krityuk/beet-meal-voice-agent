@@ -4,11 +4,16 @@ import MealCard from "./MealCard";
 import type { Meal } from "../types/Meal";
 import { API_ENDPOINTS } from "../constants/api";
 
+import { getFoodsCollection } from "../api/foods";
+import type { Food } from "../types/Food";
+
 export default function MealList() {
     const [meals, setMeals] = useState<Meal[]>([]);
+    const [foodsCollection, setFoodsCollection] = useState<Food[]>([]);
 
     useEffect(() => {
-        loadMeals();
+        loadMeals(); // from mongoDB
+        loadFoodsCollection(); // from foods.json
 
         const eventSource = new EventSource(
             API_ENDPOINTS.EVENTS
@@ -27,6 +32,13 @@ export default function MealList() {
         const data = await getMeals();
         setMeals(data.data);
     }
+
+    async function loadFoodsCollection() {
+        const response = await getFoodsCollection();
+        setFoodsCollection(response.data);
+    }
+
+    const foodsMap = new Map(foodsCollection.map(food => [food.id, food]));
 
     const groupedMeals = meals.reduce((groups, meal) => {
         const date = new Date(meal.consumedDate);
@@ -72,6 +84,7 @@ export default function MealList() {
                         <MealCard
                             key={meal._id}
                             meal={meal}
+                            food={foodsMap.get(meal.foodId)}
                         />
                     ))}
                 </div>

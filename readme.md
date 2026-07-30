@@ -221,6 +221,10 @@ Examples include:
 
 - Manual testing has been completed; automated tests have not yet been added.
 - Authentication and user accounts are not implemented since they were outside the scope of the assignment.
+- Suppose I eat 4 bananas today; Remove the bananas i logged for todays lunch.
+Then while getting/deleting/updating it would do filter by mealType and found no logged bananas.
+Solution
+mealType: { $in: ["Lunch", null, ""] }
 
 ---
 
@@ -229,6 +233,8 @@ Examples include:
 Given more time, I would enhance the application in the following ways:
 
 - **User authentication and data isolation:** The current implementation stores meal logs without user authentication, so all logs are shared. I would introduce user authentication (e.g., JWT/sessionId) and associate each meal with a `userId`, ensuring every user can access and manage only their own meal history.
+
+- Currently at many places in code, we are passing too many variables. We can create DTO to improve code quality.
 
 - **Automated testing:** Add comprehensive unit, integration, and end-to-end tests to improve reliability and simplify future maintenance.
 
@@ -240,7 +246,6 @@ Given more time, I would enhance the application in the following ways:
 
 - **Date-Time-Zone:** Currently agent will use the timezone of of that server where agent is deployed, Becasue we are fetching DateTime.Now() in agent folder. If user is in different timezone, it will still use server timezone. We can store date into {user_id,Country_Name} and {Country_Name,TimeZone} into database tables.
 
-- **Database Normalisation** Currently each doc in `meals` collection is having quantity and nutrition both, Nutrition storing there is redundant. We can do normalisation.
 - "Concurrency Control" Suppose two devices simultaneosuly tell agent to increment apple count by 1, so we should use version_key of mongodb docs to do optimistic locking. If conflicts are frequent then do distributed locking  i.e.. redis, by await redis.set(`meal:${mealId}`, "locked", { NX:true, EX:10 }); method
 
 ## Demo

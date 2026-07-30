@@ -1,16 +1,11 @@
 import Meal from "../models/Meal.js";
-import { getFoodDetails } from "./foodService.js";
+import { findFoodIdByAlias } from "./foodService.js";
 import { log } from "../utils/logger.js";
 
 async function logMeal({ food, quantity, mealType, consumedDate }) {
-    const mealDetails = getFoodDetails(
-        food,
-        quantity,
-        mealType,
-        consumedDate,
-    );
+    const foodId = findFoodIdByAlias(food);
 
-    const meal = new Meal(mealDetails);
+    const meal = new Meal({ foodId, quantity, mealType, consumedDate });
 
     await meal.save();
 
@@ -20,66 +15,58 @@ async function logMeal({ food, quantity, mealType, consumedDate }) {
 async function getMeals({ food, startDate, endDate, mealType } = {}) {
 
     const filter = {};
-
-    if (food) {
-        filter.foodName = new RegExp(`^${food}$`, "i"); // Case-insensitive match
-    }
-
+    if (food) filter.foodId = findFoodIdByAlias(food);
+    if (mealType) filter.mealType = mealType;
     if (startDate || endDate) {
         filter.consumedDate = {};
-
-        if (startDate) {
-            filter.consumedDate.$gte = new Date(startDate);
-        }
-
-        if (endDate) {
-            filter.consumedDate.$lte = new Date(endDate);
-        }
+        if (startDate) filter.consumedDate.$gte = new Date(startDate);
+        if (endDate) filter.consumedDate.$lte = new Date(endDate);
     }
 
     let query = Meal.find(filter)
         .sort({ consumedDate: -1 })
         .lean();
 
-
     return query;
 }
 
-async function updateMeals({ food, newFood, mealType, quantity, startDate, endDate, }) {
+async function updateMeals({ oldFood, newFood, oldMealType, newMealType, oldQuantity, newQuantity, startDate, endDate }) {
+    console.log("I am inside updateMeals function 💗💗💗💗")
+
+    let newFoodId;
+    if (newFood) newFoodId = findFoodIdByAlias(newFood); //findFoodIdByAlias method would be in top of func, as it contains a throw error
+
     const filter = {};
-
-    if (food) {
-        filter.foodName = {
-            $regex: new RegExp(`^${food}$`, "i"),
-        };
+    if (oldFood) filter.foodId = findFoodIdByAlias(oldFood);
+    if (oldMealType) filter.mealType = oldMealType;
+    if (oldQuantity) filter.quantity = oldQuantity;
+    if (startDate || endDate) {
+        filter.consumedDate = {};
+        if (startDate) filter.consumedDate.$gte = new Date(startDate);
+        if (endDate) filter.consumedDate.$lte = new Date(endDate);
     }
 
-    if (mealType) {
-        filter.mealType = mealType;
-    }
+    if(Object.keys(filter).length===0)
+        throw new Error("Please specify which meals to Update.");
 
-    if (startDate && endDate) {
-        filter.consumedDate = {
-            $gte: new Date(startDate),
-            $lte: new Date(endDate),
-        };
-    }
+    console.log(JSON.stringify(filter, null, 2));
+    console.log(await Meal.find().lean());
 
     const meals = await Meal.find(filter);
-    log(meals);
+
+    log(meals, "is meals in updateMeals");
 
     if (meals.length === 0) {
         throw new Error("No matching meals found.");
     }
 
     const operations = meals.map(meal => {
-
-        const updatedMeal = getFoodDetails(
-            newFood ?? meal.foodName,
-            quantity ?? meal.quantity,
-            mealType ?? meal.mealType,
-            meal.consumedDate
-        );
+        const updatedMeal = {
+            foodId: newFoodId ?? meal.foodId,
+            quantity: newQuantity ?? meal.quantity,
+            mealType: newMealType ?? meal.mealType,
+            consumedDate: meal.consumedDate,
+        };
 
         return {
             updateOne: {
@@ -90,8 +77,11 @@ async function updateMeals({ food, newFood, mealType, quantity, startDate, endDa
             },
         };
     });
+    log("Going to perform Meal.bulk")
 
     const result = await Meal.bulkWrite(operations);
+    log(result, "is result");
+    console.dir(result, { depth: null });
 
     return result;
 }
@@ -99,23 +89,16 @@ async function updateMeals({ food, newFood, mealType, quantity, startDate, endDa
 async function deleteMeals({ food, mealType, startDate, endDate }) {
 
     const filter = {};
-
-    if (food) {
-        filter.foodName = {
-            $regex: new RegExp(`^${food}$`, "i"),
-        };
+    if (food) filter.foodId = findFoodIdByAlias(food);
+    if (mealType) filter.mealType = mealType;
+    if (startDate || endDate) {
+        filter.consumedDate = {};
+        if (startDate) filter.consumedDate.$gte = new Date(startDate);
+        if (endDate) filter.consumedDate.$lte = new Date(endDate);
     }
 
-    if (mealType) {
-        filter.mealType = mealType;
-    }
-
-    if (startDate && endDate) {
-        filter.consumedDate = {
-            $gte: new Date(startDate),
-            $lte: new Date(endDate),
-        };
-    }
+    if(Object.keys(filter).length===0)
+    throw new Error("Please specify which meals to delete.");
 
     return await Meal.deleteMany(filter);
 }
