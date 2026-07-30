@@ -295,7 +295,7 @@ describe('agent evaluation', () => {
   it("updates a meal", { timeout: 30000 }, async () => {
     const result = await session
       .run({
-        userInput: "Actually make that three rotis.",
+        userInput: "Update the two rotis of lunch to three rotis.",
       })
       .wait();
 

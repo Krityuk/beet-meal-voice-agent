@@ -1,4 +1,5 @@
-import Meal from "../models/Meal.js";
+import { Meal } from "../models/Meal.js";
+import { ApiError } from "../utils/ApiError.js";
 import { findFoodIdByAlias } from "./foodService.js";
 import { log } from "../utils/logger.js";
 
@@ -47,15 +48,14 @@ async function updateMeals({ oldFood, newFood, oldMealType, newMealType, oldQuan
     }
 
     if (Object.keys(filter).length === 0)
-        throw new Error("Please specify which meals to Update.");
+        throw new ApiError(400, "Please specify which meals to Update.");
 
     const meals = await Meal.find(filter);
 
     log(meals, "is meals in updateMeals");
 
-    if (meals.length === 0) {
-        throw new Error("No matching meals found");
-    }
+    if (meals.length === 0)
+        throw new ApiError(404, "No matching meals found");
 
     const operations = meals.map(meal => {
         const updatedMeal = {
@@ -81,7 +81,7 @@ async function updateMeals({ oldFood, newFood, oldMealType, newMealType, oldQuan
     log(result, "is result");
 
     if (result.matchedCount !== meals.length)
-        throw new Error("One or more meals were modified by another request. Please try again.");
+        throw new ApiError(409, "One or more meals were modified by another request. Please try again.");
 
     return result;
 }
@@ -98,9 +98,15 @@ async function deleteMeals({ food, mealType, startDate, endDate }) {
     }
 
     if (Object.keys(filter).length === 0)
-        throw new Error("Please specify which meals to delete.");
+        throw new ApiError(400, "Please specify which meals to Update.");
 
-    return await Meal.deleteMany(filter);
+    const result = await Meal.deleteMany(filter);
+
+    if (result.deletedCount === 0)
+        throw new ApiError(404, "No matching meals found.");
+
+    return result;
+
 }
 
 export {

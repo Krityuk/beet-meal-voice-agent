@@ -43,4 +43,4 @@ mealSchema.index({ foodId: 1, consumedDate: -1 });
 
 const Meal = mongoose.model("Meal", mealSchema);
 
-export default Meal;
+export {Meal};

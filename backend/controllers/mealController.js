@@ -16,7 +16,7 @@ async function logMealController(req, res) {
             data: meal,
         });
     } catch (error) {
-        res.status(400).json({
+        res.status(error.statusCode || 500).json({
             success: false,
             message: error.message,
         });
@@ -35,7 +35,7 @@ async function getMealsController(req, res) {
             data: meals,
         });
     } catch (error) {
-        res.status(500).json({
+        res.status(error.statusCode || 500).json({
             success: false,
             message: error.message,
         });
@@ -56,17 +56,7 @@ async function updateMealController(req, res) {
             data: result,
         });
     } catch (error) {
-        if(error.message === "No matching meals found")
-            return res.status(404).json({
-                success: false,
-                message: error.message,
-            });
-        if(error.message === "One or more meals were modified by another request. Please try again.")
-            return res.status(409).json({ //optimistic locking
-                success: false,
-                message: error.message,
-            });
-        res.status(400).json({
+        res.status(error.statusCode || 500).json({
             success: false,
             message: error.message,
         });
@@ -78,13 +68,6 @@ async function deleteMealController(req, res) {
     try {
         const deletedMeal = await deleteMeals(req.body);
 
-        if (!deletedMeal) {
-            return res.status(404).json({
-                success: false,
-                message: "No such meal found for this timeline."
-            });
-        }
-
         notifyClients();
 
         res.status(200).json({
@@ -93,7 +76,7 @@ async function deleteMealController(req, res) {
             data: deletedMeal,
         });
     } catch (error) {
-        res.status(400).json({
+        res.status(error.statusCode || 500).json({
             success: false,
             message: error.message,
         });
