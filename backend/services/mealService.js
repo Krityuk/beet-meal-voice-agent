@@ -23,15 +23,15 @@ async function getMeals({ food, startDate, endDate, mealType } = {}) {
         if (endDate) filter.consumedDate.$lte = new Date(endDate);
     }
 
-    let query = Meal.find(filter)
+    let meals = Meal.find(filter)
         .sort({ consumedDate: -1 })
         .lean();
 
-    return query;
+    return meals;
 }
 
 async function updateMeals({ oldFood, newFood, oldMealType, newMealType, oldQuantity, newQuantity, startDate, endDate }) {
-    console.log("I am inside updateMeals function 💗💗💗💗")
+    log("I am inside updateMeals function ");
 
     let newFoodId;
     if (newFood) newFoodId = findFoodIdByAlias(newFood); //findFoodIdByAlias method would be in top of func, as it contains a throw error
@@ -46,18 +46,15 @@ async function updateMeals({ oldFood, newFood, oldMealType, newMealType, oldQuan
         if (endDate) filter.consumedDate.$lte = new Date(endDate);
     }
 
-    if(Object.keys(filter).length===0)
+    if (Object.keys(filter).length === 0)
         throw new Error("Please specify which meals to Update.");
-
-    console.log(JSON.stringify(filter, null, 2));
-    console.log(await Meal.find().lean());
 
     const meals = await Meal.find(filter);
 
     log(meals, "is meals in updateMeals");
 
     if (meals.length === 0) {
-        throw new Error("No matching meals found.");
+        throw new Error("No matching meals found");
     }
 
     const operations = meals.map(meal => {
@@ -70,9 +67,10 @@ async function updateMeals({ oldFood, newFood, oldMealType, newMealType, oldQuan
 
         return {
             updateOne: {
-                filter: { _id: meal._id },
+                filter: { _id: meal._id, __v: meal.__v },
                 update: {
                     $set: updatedMeal,
+                    $inc: { __v: 1 } // optimistic locking for multiple devices simultaneously updating same entry
                 },
             },
         };
@@ -81,7 +79,9 @@ async function updateMeals({ oldFood, newFood, oldMealType, newMealType, oldQuan
 
     const result = await Meal.bulkWrite(operations);
     log(result, "is result");
-    console.dir(result, { depth: null });
+
+    if (result.matchedCount !== meals.length)
+        throw new Error("One or more meals were modified by another request. Please try again.");
 
     return result;
 }
@@ -97,8 +97,8 @@ async function deleteMeals({ food, mealType, startDate, endDate }) {
         if (endDate) filter.consumedDate.$lte = new Date(endDate);
     }
 
-    if(Object.keys(filter).length===0)
-    throw new Error("Please specify which meals to delete.");
+    if (Object.keys(filter).length === 0)
+        throw new Error("Please specify which meals to delete.");
 
     return await Meal.deleteMany(filter);
 }

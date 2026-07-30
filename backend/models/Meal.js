@@ -31,7 +31,6 @@ const mealSchema = new mongoose.Schema(
         },
     },
     {
-        versionKey: false,
     }
 );
 

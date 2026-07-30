@@ -56,6 +56,16 @@ async function updateMealController(req, res) {
             data: result,
         });
     } catch (error) {
+        if(error.message === "No matching meals found")
+            return res.status(404).json({
+                success: false,
+                message: error.message,
+            });
+        if(error.message === "One or more meals were modified by another request. Please try again.")
+            return res.status(409).json({ //optimistic locking
+                success: false,
+                message: error.message,
+            });
         res.status(400).json({
             success: false,
             message: error.message,

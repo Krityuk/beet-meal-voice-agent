@@ -219,12 +219,22 @@ Examples include:
 
 ## Known Limitations
 
-- Manual testing has been completed; automated tests have not yet been added.
 - Authentication and user accounts are not implemented since they were outside the scope of the assignment.
 - Suppose I eat 4 bananas today; Remove the bananas i logged for todays lunch.
-Then while getting/deleting/updating it would do filter by mealType and found no logged bananas.
-Solution
-mealType: { $in: ["Lunch", null, ""] }
+    Then while getting/deleting/updating it would do filter by mealType and found no logged bananas.
+    Solution is to replace below line with 2nd-below line
+    mealType: { "Lunch" }
+    mealType: { $in: ["Lunch", null, ""] }
+
+- Suppose user say, update all the meals of today to yesterday.
+    There is no feature to update consumedDate or loggedDate, because am not passing them in updateMealTool,
+    because so many functionalities are not need to make.
+
+- Suppose user say, tell me all meals I logged yesterday.
+    So here it is not clear that user wants to have all meals with  consumedDate=yesterday or loggedDate= yesterday
+    I have made the project like above line would mean consumedDate = yesterday
+
+- We can add custom Error class to follow dry principle in the controllers.
 
 ---
 
